@@ -1,0 +1,24 @@
+{
+  "name": "mysql-employee-tracker",
+  "version": "1.0.0",
+  "description": "Database to track employees",
+  "main": "employeeTracker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cascutter/MySQL-Employee-Tracker.git"
+  },
+  "author": "Casandra Cutter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cascutter/MySQL-Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/cascutter/MySQL-Employee-Tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}

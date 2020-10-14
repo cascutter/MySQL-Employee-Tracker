@@ -122,6 +122,7 @@ function addEmployee() {
             {
                 name: "choice",
                 type: "rawlist",
+                message: "What is the employee's role?",
                 choices: function() {
                     var choiceArray = [];
                     for (var i = 0; i < results.length; i++) {
@@ -130,7 +131,6 @@ function addEmployee() {
 
                     return choiceArray;
                 },
-                message: "What is the employee's role?"
             }
         ]).then(function(res) {
             for (var i = 0; i < results.length; i++) {
@@ -210,6 +210,7 @@ function addDepartment() {
     })
 }
 
+// Allows user to update employee role
 function updateRole() {
     inquirer.prompt({
             type: "input",
@@ -239,6 +240,7 @@ function updateRole() {
         });
 }
 
+// Allows user to remove an employee
 function removeEmployee() {
     inquirer
         .prompt({

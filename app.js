@@ -60,7 +60,12 @@ function askUser() {
                 updateRole();
                 break;
 
+            case "Remove employee":
+                removeEmployee();
+                break;
+
             case "Exit":
+                console.log("Goodbye!");
                 connection.end();
                 break;
         }
@@ -69,19 +74,17 @@ function askUser() {
 
 // Displays all employees and their relevant data based on askUser selection "View all employees"
 function viewAll() {
-    console.log("Retrieving all employees from database:");
     connection.query("SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employee INNER JOIN role on role.id = employee.role_id INNER JOIN department on department.id = role.department_id left join employee e on employee.manager_id = e.id;",
         function(err, res) {
-            if (err)
-                throw err;
-            console.table(res);
+            if (err) throw err
+            console.table(res)
             askUser();
         })
-};
+}
 
 // Displays all employee roles based on askUser selection "View all roles"
 function viewRoles() {
-    connection.query("SELECT employee.first_name, employee.last_name, role.title AS title FROM employee JOIN role ON employee.role_id = role.id;",
+    connection.query("SELECT * from role",
         function(err, res) {
             if (err) throw err;
             console.log("\n Employee roles found in database: \n");
@@ -100,54 +103,59 @@ function viewDepartments() {
     });
 }
 
-// Queries role title for addEmployee function
-let roleArray = [];
-
-function getRole() {
-    connection.query("SELECT * FROM role", function(err, res) {
-        if (err) throw err
-        for (let i = 0; i < res.length; i++) {
-            roleArray.push(res[i].title);
-        }
-
-    })
-    return roleArray;
-}
-
 // Allows user to add an employee to the database
 function addEmployee() {
-    inquirer.prompt([{
-            type: "input",
-            name: "firstname",
-            message: "Enter employee's first name: "
-        },
-        {
-            type: "input",
-            name: "lastname",
-            message: "Enter employee's last name: "
-        },
-        {
-            type: "list",
-            name: "role",
-            message: "What is the employee's role?",
-            choices: getRole()
-        },
-    ]).then(function(answer) {
-        let roleId = getRole().indexOf(answer.role) + 1;
-        connection.query(
-            "INSERT INTO employee SET ?", {
-                first_name: answer.firstname,
-                last_name: answer.lastname,
-                role_id: roleId,
+
+    connection.query("SELECT * FROM role", function(err, results) {
+        if (err) throw err;
+
+        inquirer.prompt([{
+                type: "input",
+                name: "firstname",
+                message: "What is the employee's first name?"
+            },
+            {
+                type: "input",
+                name: "lastname",
+                message: "What is the employee's last name?"
+            },
+            {
+                name: "choice",
+                type: "rawlist",
+                choices: function() {
+                    var choiceArray = [];
+                    for (var i = 0; i < results.length; i++) {
+                        choiceArray.push(results[i].title);
+                    }
+
+                    return choiceArray;
+                },
+                message: "What is the employee's role?"
             }
-        )
-    }, function(err) {
-        if (err) throw err
-        console.log("Employee has been added!")
-        console.table(answer);
-        askUser();
+        ]).then(function(res) {
+            for (var i = 0; i < results.length; i++) {
+                if (results[i].title === res.choice) {
+                    res.role_id = results[i].id;
+                }
+            }
+            var query = "INSERT INTO employee SET ?"
+            const VALUES = {
+                first_name: res.firstname,
+                last_name: res.lastname,
+                role_id: res.role_id
+            }
+            connection.query(query, VALUES, function(err) {
+                    if (err) throw err;
+                    console.log("Employee successfully added!");
+                    askUser();
+                }
+
+            )
+        })
     })
+
 }
+
 
 // Allows user to add a role to database
 function addRole() {
@@ -166,19 +174,20 @@ function addRole() {
             name: "deptid",
             message: "Enter the department id for new role:"
         }
-    ]).then(function(answer) {
+    ]).then(function(result) {
         connection.query(
             "INSERT INTO role SET ?", {
-                title: answer.newrole,
-                salary: answer.newsalary,
-                department_id: answer.deptid
+                title: result.newrole,
+                salary: result.newsalary,
+                department_id: result.deptid
             },
             function(err) {
                 if (err) throw err;
-            },
-            console.table(answer)
-        )
-    })
+                console.table(result);
+                console.log("New role added!");
+                askUser();
+            });
+    });
 }
 
 // Allows user to add a department to database
@@ -202,11 +211,10 @@ function addDepartment() {
 }
 
 function updateRole() {
-    console.log('updating emp');
     inquirer.prompt({
             type: "input",
             name: "id",
-            message: "Enter employee id",
+            message: "Enter employee ID:",
         })
         .then(function(answer) {
             var id = answer.id;
@@ -215,7 +223,7 @@ function updateRole() {
                 .prompt({
                     type: "input",
                     name: "roleId",
-                    message: "Enter role id",
+                    message: "Enter employee's new role ID",
                 })
                 .then(function(answer) {
                     var roleId = answer.roleId;
@@ -228,5 +236,25 @@ function updateRole() {
                         askUser();
                     });
                 });
+        });
+}
+
+function removeEmployee() {
+    inquirer
+        .prompt({
+            name: "employeeRemove",
+            type: "input",
+            message: "To REMOVE an employee, enter the Employee id",
+
+        })
+        .then(function(answer) {
+            console.log(answer);
+            var query = "DELETE FROM employee WHERE ?";
+            var newId = Number(answer.employeeRemove);
+            console.log(newId);
+            connection.query(query, { id: newId }, function(err, res) {
+                askUser();
+
+            });
         });
 }

@@ -1,6 +1,6 @@
 USE employee_db;
 
-INSERT INTO departments(department_name)
+INSERT INTO department(name)
 VALUES 
 ("Management"),
 ("Marketing"),
@@ -9,7 +9,7 @@ VALUES
 ("Human Resources"),
 ("Accounting");
 
-INSERT INTO roles(title, salary, department_id)
+INSERT INTO role(title, salary, department_id)
 VALUES
 ("Executive", 200000, 1),
 ("Marketing Manager", 120000, 1),
@@ -22,20 +22,20 @@ VALUES
 ("HR Rep", 75000, 5),
 ("Accountant", 92000, 6);
 
-INSERT INTO employees(first_name, last_name, role_id) 
+INSERT INTO employee(first_name, last_name, role_id, manager_id) 
 VALUES
-("Marie", "Curie", 1),
-("Anaïs", "Nin", 2),
-("Toni", "Morrison", 3),
-("Ada", "Lovelace", 4),
-("Jane", "Goodall", 5)
-("Sojourner", "Truth", 6);
-("Rosalind", "Franklin", 7),
-("Harriet", "Beecher Stowe", 7),
-("Vera", "Atkins", 8),
-("Gail", "Laughlin", 8),
-("Mary", "Seacole", 9),
-("Madeleine", "Albright", 10),
-("Sandra", "Day O'Connor", 10);
+("Marie", "Curie", 1, null),
+("Anaïs", "Nin", 2, 1),
+("Toni", "Morrison", 3, 1),
+("Ada", "Lovelace", 4, 1),
+("Jane", "Goodall", 5, 2),
+("Sojourner", "Truth", 6, 2),
+("Rosalind", "Franklin", 7, 3),
+("Harriet", "Beecher Stowe", 7, 3),
+("Vera", "Atkins", 8, 4),
+("Gail", "Laughlin", 8, 4),
+("Mary", "Seacole", 9, null),
+("Madeleine", "Albright", 10, null),
+("Sandra", "Day O'Connor", 10, null);
 
-UPDATE `employee_db`.`employees` SET `manager_id` = "1" WHERE (`id` > "1");
+UPDATE `employee_db`.`employee` SET `manager_id` = "1" WHERE (`id` > "1");

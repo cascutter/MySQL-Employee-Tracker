@@ -37,5 +37,3 @@ VALUES
 ("Mary", "Seacole", 9, null),
 ("Madeleine", "Albright", 10, null),
 ("Sandra", "Day O'Connor", 10, null);
-
-UPDATE `employee_db`.`employee` SET `manager_id` = "1" WHERE (`id` > "1");

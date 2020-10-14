@@ -14,9 +14,8 @@
 # Description
 Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. To achieve this, a solution was built for managing a company's employees using node, inquirer, and MySQL.
 
-<img src="">
-<img src="">
-<img src="">
+<img src="Assets/Add Employee.png">
+<img src="Assets/View Employees.png">
     
 ## Installation
 Clone repository to your local drive. This application requires you to run the following: ```npm install mysql```, ```npm install inquirer```, ```npm install console.table```
@@ -28,11 +27,9 @@ The application allows users to accomplish the following tasks:
 * Update employee roles
 * Delete employees
 
-* <a href="">Link to Demo Video</a>
+* <a href="https://vimeo.com/468294215">Link to Demo Video</a>
 
-<img src="">
-<img src="">
-<img src="">
+<img src="https://media.giphy.com/media/FY1LPBK2Kk2DLEmndt/giphy.gif">
           
 ## Tests
 All tests currently passing.
